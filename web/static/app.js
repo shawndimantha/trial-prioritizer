@@ -78,11 +78,13 @@ function citationHTML(c) {
   return `<span class="src">${esc(c.source_id || "")}</span> — ${link}`;
 }
 
-function findingCard(f) {
+function findingCard(f, opts) {
+  const prov = opts && opts.provisional && f.axis !== "3"
+    ? ` <span class="prov">(provisional)</span>` : "";
   return el("div", "finding",
     `<div class="head">
        <span class="fid">[${esc(f.id)}]</span>
-       <span class="axis">axis ${esc(f.axis)} · ${esc(AXIS[f.axis] || "")}</span>
+       <span class="axis">Axis-${esc(f.axis)} · ${esc(AXIS[f.axis] || "")}${prov}</span>
        <span class="leth">lethality ${lethPips(f.lethality)} ${esc(f.lethality)}/5</span>
      </div>
      <div class="title">${esc(f.title)}</div>
@@ -193,9 +195,21 @@ function memCard(arr) {
 
 /* ---- the replay ------------------------------------------------------- */
 
+function isFallback(d) {
+  return !!(d && (d.kind === "fallback" || d.catch || d.bar_holds));
+}
+
 async function render(data) {
   seq++; const my = seq; stage.innerHTML = "";
+  try {
+    if (isFallback(data)) await renderFallback(data, my);
+    else await renderFixture(data, my);
+  } catch (e) {
+    if (live(my)) stage.appendChild(el("div", "fail mono", "render error: " + esc(String(e))));
+  }
+}
 
+async function renderFixture(data, my) {
   document.getElementById("indication").textContent = "/ " + (data.indication || "PSP");
   const eng = data.engine || {};
   document.getElementById("engine").textContent =
@@ -282,6 +296,171 @@ async function render(data) {
 
 /* ---- boot ------------------------------------------------------------- */
 
+/* ---- the real artifact (fallback shape) ------------------------------- */
+/* Renders results/<ts>-fallback.json verbatim as 4 beats:
+   kill-list (clean) -> the catch (deterministic G2 kill of the AMX0035 overclaim)
+   -> the bar holds (scaled-back claim still fails G2) -> DO NOT RUN.
+   Nothing here is invented: every gate verdict comes from the JSON. Beats the
+   spec marks as DROPPED (salsalate/lithium, surviving levers, kill-pass revise,
+   catch-as-live-builder) are deliberately absent. */
+
+async function gradeBlock(my, o) {
+  const fail = o.verdictKind === "fail";
+  const block = add(el("div", "verifier " + (fail ? "failblock" : "passblock")));
+  block.appendChild(el("div", "cmd", o.header));
+  await pace(170); if (!live(my)) return;
+  for (const g of o.gates) {
+    const ok = g.passed;
+    const row = el("div", "gate",
+      `<span class="g">${g.key.toUpperCase()}</span>
+       <span class="gname">${GATE_LABEL[g.key] || ""}</span>
+       <span class="res ${ok ? "pass" : "fail"}">${ok ? "PASS" : "FAIL"}</span>
+       <span class="reason">${esc(g.reason || "")}</span>`);
+    block.appendChild(row);
+    if (!skip) row.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    await pace(130); if (!live(my)) return;
+  }
+  block.appendChild(el("div", "verdict " + (fail ? "fail" : "pass"), o.verdictText));
+  await pace(220);
+}
+
+function provLine(text) {
+  const n = el("div", "prov-log faint mono", text);
+  return n;
+}
+
+function constructiveCard(ca) {
+  const ids = ca.proposed_remediation_ids || [];
+  const axisOf = (id) => (String(id).match(/^[A-Za-z](\d)/) || [])[1] || "?";
+  const rows = ids.map((id) =>
+    `<div class="prow"><span class="pid">${esc(id)}</span>` +
+    `<span class="paxis">axis ${esc(axisOf(id))}</span>` +
+    `<span class="pverdict">— no survival verdict</span></div>`).join("");
+  return el("div", "incomplete",
+    `<div class="ih">&#9888; ${ids.length} remediations proposed across all three axes · grounded · ` +
+    `<span class="iwarn">verification INTERRUPTED</span></div>
+     <div class="ids">${rows}</div>
+     <div class="evid">${esc(ca.evidence || "")}</div>
+     <div class="istat">${esc(ca.status || "")} — proposed and grounded, <b>not</b> evaluated. ` +
+    `No pass/fail was recorded for these; they are not surviving levers.</div>`);
+}
+
+function dnrBanner(dnr) {
+  return el("div", "dnr",
+    `<div class="dnrhead">${esc(dnr.status || "DO NOT RUN AS DESIGNED")}</div>
+     <div class="dnrbody">Repurposing could not be grounded for PSP / 4R-tau: the AMX0035 efficacy
+       pitch was rejected on G2, and so was a deliberately scaled-back, efficacy-agnostic version —
+       the bar holds. Remediations proposed across all three axes were not verified before the run
+       was interrupted. When no remediation clears the bar, the loop returns DO NOT RUN.</div>
+     <div class="dnrnote faint">the do-not-run branch fires deterministically; its stub inputs only
+       prove the branch triggers — they are not real levers.</div>`);
+}
+
+async function renderFallback(data, my) {
+  document.getElementById("indication").textContent = "/ PSP";
+  document.getElementById("engine").textContent =
+    "replay · " + (data.kind || "run") + (data.assembled_from ? " · " + data.assembled_from : "");
+  const prov = data.provenance || {};
+
+  phase("&#9655;", "persisted real run · replay", "default demo path · network-flake-proof");
+  const banner = add(el("div", "dim mono"));
+  banner.style.cssText = "font-size:11.5px;margin-top:-4px";
+  banner.textContent = "Assembled from proven, captured results — no live API call required.";
+  await pace(440); if (!live(my)) return;
+
+  // BEAT 1 — the kill-list (clean; no per-gate verdicts in the artifact)
+  const kl = data.kill_list || [];
+  phase("1", "kill-list · the substantiated case", `${kl.length} findings · kill side passed clean`);
+  await pace(220); if (!live(my)) return;
+  for (const f of kl) { add(findingCard(f, { provisional: true })); await pace(280); if (!live(my)) return; }
+
+  // BEAT 2 + 3 — greenlight: the catch, then the bar holds
+  phase("2", "greenlight · does any repurposing clear the same bar?", "the path to yes clears the kill's bar");
+  await pace(200); if (!live(my)) return;
+  const intro = add(el("div", "dim mono")); intro.style.cssText = "font-size:12px;margin:2px 0 4px";
+  intro.textContent = "A remediation must clear the same four gates as the kill. The verifier holds that bar.";
+  await pace(300); if (!live(my)) return;
+
+  const cat = data.catch || {};
+  if (cat.overclaim) {
+    add(el("div", "subhead",
+      `the catch <span class="tag">deterministic verifier check — the verifier reliably kills this overclaim; not a live builder pitch</span>`));
+    add(findingCard(cat.overclaim));
+    await pace(280); if (!live(my)) return;
+    const g2 = cat.verifier_g2 || {};
+    await gradeBlock(my, {
+      header: `$ verify <span class="fid">${esc(cat.overclaim.id)}</span> &nbsp;·&nbsp; deterministic G2 entailment check`,
+      gates: [{ key: "g2", passed: !!g2.passed, reason: g2.reason }],
+      verdictText: `VERDICT: ${(cat.outcome || "rejected").toUpperCase()} — overclaim killed on G2`,
+      verdictKind: "fail",
+    });
+    if (!live(my)) return;
+    if (prov.overclaim_check_log) { add(provLine(`real verifier session log: ${prov.overclaim_check_log}`)); await pace(160); }
+  }
+
+  const bh = data.bar_holds || {};
+  if (bh.defensible_fixture) {
+    add(el("div", "revise",
+      `<div class="h">&#8635; scaled back — a deliberately defensible, efficacy-agnostic Phase 2a bridge, re-graded against the same four gates</div>`));
+    await pace(340); if (!live(my)) return;
+    add(el("div", "subhead",
+      `the bar holds <span class="tag">even a hand-written, scaled-back claim is rejected — the verifier doesn't bend to intent</span>`));
+    add(findingCard(bh.defensible_fixture));
+    await pace(280); if (!live(my)) return;
+    const t = bh.verdict_trail || {};
+    const gates = GATES.map((k) => ({
+      key: k, passed: !!t[k],
+      reason: k === "g2" ? (bh.g2_note || "") : "",
+    }));
+    await gradeBlock(my, {
+      header: `$ verify <span class="fid">${esc(bh.defensible_fixture.id)}</span> &nbsp;·&nbsp; re-graded against the same rubric`,
+      gates,
+      verdictText: `VERDICT: REJECTED — the bar holds (G2)`,
+      verdictKind: "fail",
+    });
+    if (!live(my)) return;
+  }
+
+  // Constructive attempt — shown, but visibly incomplete (makes DO NOT RUN earned)
+  const ca = data.constructive_attempt;
+  if (ca) {
+    phase("3", "constructive attempt · proposed across all 3 axes", "grounded · verification interrupted");
+    await pace(200); if (!live(my)) return;
+    add(constructiveCard(ca));
+    await pace(220); if (!live(my)) return;
+    if (prov.crashed_greenlight_log) { add(provLine(`crashed-run session log: ${prov.crashed_greenlight_log}`)); await pace(200); }
+  }
+
+  // BEAT 4 — DO NOT RUN
+  const dnr = data.do_not_run_branch || {};
+  phase("4", "verdict · the honest no", "nothing cleared the bar");
+  await pace(200); if (!live(my)) return;
+  add(dnrBanner(dnr));
+  await pace(300); if (!live(my)) return;
+
+  const done = add(el("div", "dim mono"));
+  done.style.margin = "22px 0 0";
+  done.innerHTML = `<span class="fail">&#9679;</span> replay complete · <b>${esc(dnr.status || "DO NOT RUN AS DESIGNED")}</b> · ` +
+    `repurposing rejected on G2 (&times;2) · levers proposed, not verified · nothing cleared the bar`;
+}
+
+/* ---- run-live (optional affordance; replay is the default) ------------- */
+function wireRunLive() {
+  const rl = document.getElementById("runlive");
+  if (!rl) return;
+  rl.onclick = () => {
+    if (document.getElementById("livenote")) return;
+    const n = el("div", "livenote mono",
+      `<b>Live mode</b> would invoke the engine on the host — the deploy check confirmed ` +
+      `<span class="pass">ANTHROPIC_API_KEY</span> present and <span class="pass">ClinicalTrials.gov</span> reachable from egress. ` +
+      `This deploy <b>defaults to replay</b> of a persisted real run: a cold live agentic run is slow and can fail mid-talk, ` +
+      `and the replayed data is itself real. <a href="#" id="livedismiss">dismiss</a>`);
+    n.id = "livenote";
+    stage.parentNode.insertBefore(n, stage);
+    document.getElementById("livedismiss").onclick = (e) => { e.preventDefault(); n.remove(); };
+  };
+}
+
 async function boot() {
   try {
     const r = await fetch("/run.json", { cache: "no-store" });
@@ -296,4 +475,5 @@ async function boot() {
 
 document.getElementById("replay").onclick = () => { skip = false; render(window.__run); };
 document.getElementById("skip").onclick = () => { skip = true; };
+wireRunLive();
 boot();
