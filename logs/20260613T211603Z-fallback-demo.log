@@ -1,0 +1,66 @@
+FALLBACK DEMO — assembled from proven, captured results (offline).
+SESSION log: /Users/shawndimantha/claudeprojects/trial-prioritizer/logs/20260613T211603Z-fallback-demo.log
+
+========================================================================
+KILL-LIST (the substantiated case against the naive N-terminal design)
+========================================================================
+  [A3-1] Axis-3 (lethality 5/5) N-terminal extracellular tau is a proven clinical dead end in PSP (PASSPORT)
+  [A3-2] Axis-3 (lethality 5/5) Class failure replicates: tilavonemab (same epitope) stopped for futility
+  [A2-1] Axis-2 (provisional) (lethality 4/5) n=180 underpowered and assumed effect falls below the PSPRS MCID
+  [A2-2] Axis-2 (provisional) (lethality 3/5) Endpoint is the legacy 28-item PSPRS the field is retiring
+
+========================================================================
+GREENLIGHT CATCH — the verifier kills an overclaimed repurposing pitch
+========================================================================
+  proposed remediation: Repurpose AMX0035 — expected to slow PSPRS by ~25%
+  optimistic claim:     AMX0035 (sodium phenylbutyrate-taurursodiol) will slow PSPRS progression by about 25% in this PSP trial, based on the survival and functional benefit it demonstrated in its pivotal ALS program.
+  verifier G2: FAIL — Verdict claims ~25% PSPRS slowing in PSP, but the source is an ALS trial; it does not entail a PSP effect, and the finding misrepresents a Phase 2 result (later refuted by the failed Phase 3 PHOENIX and market withdrawal) as a "pivotal" benefit.
+  -> overclaim REJECTED. Optimism that outran the evidence dies on the same gate that kills a hallucinated risk.
+
+========================================================================
+THE BAR HOLDS — even a scaled-back repurposing claim is rejected
+========================================================================
+  proposed remediation: Repurpose AMX0035 as a Phase 2a safety/PD bridge — efficacy unproven in tauopathy
+  verifier: G1:PASS G2:FAIL G3:PASS G4:PASS
+  G2 note: Rejected on G2 for asserting repurposing value without a grounded mechanistic link to PSP / 4R-tau — the verifier holds the bar even against a hand-written scaled-back claim.
+
+========================================================================
+CONSTRUCTIVE ATTEMPT — builder proposed grounded remediations across axes
+========================================================================
+  proposed: A3-1, A3-2, A3-3, A2-1, A2-2, A3-4, A1-1 (Axes 1/2/3)
+  evidence: builder grounded via clinicaltrials_lookup + web_search + web_fetch across AMX0035/CENTAUR, PHOENIX, plasma NfL enrichment, mPSPRS-15 power, Richardson enrichment, and tilavonemab futility (see crashed-run session log)
+  status:   verification interrupted by an infra read-timeout before completion (since fixed via streaming).
+
+========================================================================
+DO-NOT-RUN BRANCH — the honest 'no' when no remediation can be grounded
+========================================================================
+
+########################################################################
+GREENLIGHT PASS — constructive remediation under the SAME gates
+########################################################################
+BUILDER: proposed 2 remediation(s): R-1, R-2
+
+--- GREENLIGHT VERIFICATION PASS 1 (independent context per remediation) ---
+   [R-1] G1:FAIL G2:PASS G3:PASS G4:PASS  FAIL: ungroundable remediation R-1
+        ✗ G1: no retrievable source
+   [R-2] G1:FAIL G2:PASS G3:PASS G4:PASS  FAIL: ungroundable remediation R-2
+        ✗ G1: no retrievable source
+
+FAIL [R-1, R-2] — optimism outran the evidence; builder will revise.
+BUILDER: revising 2 remediation(s): R-1, R-2
+
+--- GREENLIGHT VERIFICATION PASS 2 (independent context per remediation) ---
+   [R-1] G1:FAIL G2:PASS G3:PASS G4:PASS  FAIL: ungroundable remediation R-1
+        ✗ G1: no retrievable source
+   [R-2] G1:FAIL G2:PASS G3:PASS G4:PASS  FAIL: ungroundable remediation R-2
+        ✗ G1: no retrievable source
+
+FAIL [R-1, R-2] — optimism outran the evidence; builder will revise.
+BUILDER: revising 2 remediation(s): R-1, R-2
+
+DO NOT RUN AS DESIGNED — 0 verified remediation(s), 2 dropped.
+
+results.json: /Users/shawndimantha/claudeprojects/trial-prioritizer/results/20260613T211603Z-fallback.json
+(session log: /Users/shawndimantha/claudeprojects/trial-prioritizer/logs/20260613T211603Z-fallback-demo.log)
+
+FALLBACK READY — replayable session log + results.json persisted.
