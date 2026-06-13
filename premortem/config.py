@@ -11,6 +11,8 @@ from __future__ import annotations
 import anthropic
 from dotenv import load_dotenv
 
+from .log import log
+
 # Load ANTHROPIC_API_KEY (and anything else) from a local .env if present.
 # .env is gitignored — keep secrets there, never in source.
 load_dotenv()
@@ -39,6 +41,22 @@ def _text(content) -> str:
     return "".join(b.text for b in content if getattr(b, "type", None) == "text")
 
 
+def _tool_summary(tool_input) -> str:
+    if not isinstance(tool_input, dict):
+        return ""
+    for k in ("nct_id", "query", "url", "condition"):
+        if tool_input.get(k):
+            return f"{k}={tool_input[k]!r}"
+    return ""
+
+
+def _log_tool_calls(role, content) -> None:
+    for b in content:
+        t = getattr(b, "type", None)
+        if t in ("tool_use", "server_tool_use"):
+            log(f"      · {role} retrieves: {b.name}({_tool_summary(getattr(b, 'input', None))})")
+
+
 def run_tool_loop(role, system, user, tools, dispatch_fn, max_turns=12, on_event=None):
     """Manual agentic loop. Runs the model with `tools` until it stops calling
     them, dispatching client-side tools via `dispatch_fn`. Server-side tools
@@ -61,6 +79,7 @@ def run_tool_loop(role, system, user, tools, dispatch_fn, max_turns=12, on_event
             output_config={"effort": "high"},
         )
         msgs.append({"role": "assistant", "content": resp.content})
+        _log_tool_calls(role, resp.content)
         if on_event:
             on_event(role, resp)
 

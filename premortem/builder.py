@@ -53,8 +53,12 @@ title, the claim, the quantitative threshold/comparison, the exact source \
 
 STRUCTURE_SYSTEM = """You convert a pre-mortem evidence dossier into structured \
 findings. Preserve the evidence faithfully — do not invent citations or numbers \
-not present in the dossier. Use stable ids like 'A3-1', 'A3-2'. Every finding is \
-axis '3' in this pass. lethality is 1-5 (5 = fatal)."""
+not present in the dossier. Use stable ids like 'A3-1', 'A3-2'. Assign each \
+finding its TRUE axis: '1' = population / enrollment feasibility, '2' = endpoint \
+& powering validity (sample size, MCID, choice of rating scale), '3' = mechanism \
+/ translational risk. Most findings in this Axis-3 pass are '3'; honestly label \
+powering / sample-size / endpoint-instrument findings as '2'. lethality is 1-5 \
+(5 = fatal)."""
 
 
 def _protocol_brief(job) -> str:
