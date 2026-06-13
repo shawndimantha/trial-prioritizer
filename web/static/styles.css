@@ -1,0 +1,173 @@
+:root{
+  --bg:#0b0d11; --panel:#0f1217; --panel2:#0c0f14;
+  --fg:#cdd3dc; --dim:#6e7888; --faint:#49515f; --line:#1b212b; --line2:#262d39;
+  --pass:#3fb950; --fail:#f85149; --warn:#d29922; --accent:#58a6ff; --green:#56d364;
+  --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:var(--bg);color:var(--fg)}
+body{font-family:var(--mono); font-size:13.5px; line-height:1.65;
+  -webkit-font-smoothing:antialiased; padding-bottom:60px}
+.mono{font-family:var(--mono)}
+.dim{color:var(--dim)} .faint{color:var(--faint)}
+a{color:var(--accent); text-decoration:none} a:hover{text-decoration:underline}
+
+/* top bar */
+.topbar{position:sticky; top:0; z-index:10; display:flex; justify-content:space-between;
+  align-items:center; padding:12px 22px; background:rgba(11,13,17,.92);
+  backdrop-filter:blur(6px); border-bottom:1px solid var(--line)}
+.brand{font-weight:600; letter-spacing:.02em}
+.brand .dot{display:inline-block; width:8px; height:8px; border-radius:50%;
+  background:var(--green); box-shadow:0 0 8px var(--green); margin-right:6px; vertical-align:middle}
+.brand .sub{color:var(--dim); font-weight:400; margin-left:4px}
+.controls{display:flex; align-items:center; gap:10px}
+.engine{color:var(--faint); font-size:11.5px}
+.btn{font-family:var(--mono); font-size:12px; color:var(--dim); background:transparent;
+  border:1px solid var(--line2); border-radius:6px; padding:5px 10px; cursor:pointer}
+.btn:hover{color:var(--fg); border-color:var(--dim)}
+
+main{max-width:880px; margin:0 auto; padding:30px 22px 0}
+.footer{max-width:880px; margin:34px auto 0; padding:14px 22px; border-top:1px solid var(--line);
+  font-size:11.5px}
+
+/* phase header */
+.phase{display:flex; align-items:center; gap:12px; margin:38px 0 16px; color:var(--dim)}
+.phase:first-child{margin-top:6px}
+.phase .n{display:inline-flex; align-items:center; justify-content:center; width:22px; height:22px;
+  border:1px solid var(--line2); border-radius:50%; font-size:11px; color:var(--fg); flex:0 0 auto}
+.phase .t{font-weight:600; color:var(--fg); letter-spacing:.02em; text-transform:uppercase; font-size:12px}
+.phase .rule{flex:1; height:1px; background:var(--line)}
+.phase .meta{font-size:11px; color:var(--faint)}
+
+/* generic reveal */
+.reveal{opacity:0; transform:translateY(4px); animation:rise .28s ease forwards}
+@keyframes rise{to{opacity:1; transform:none}}
+
+/* protocol header card */
+.protocol{border:1px solid var(--line); border-left:2px solid var(--accent); border-radius:8px;
+  background:var(--panel); padding:16px 18px}
+.protocol .name{font-weight:600; margin-bottom:8px}
+.protocol .grid{display:grid; grid-template-columns:auto 1fr; gap:3px 14px; font-size:12.5px}
+.protocol .k{color:var(--dim)} .protocol .v{color:var(--fg)}
+
+/* finding card */
+.finding{border:1px solid var(--line); border-radius:8px; background:var(--panel);
+  padding:14px 16px; margin:10px 0}
+.finding.kill{border-left:2px solid var(--fail)}
+.finding .head{display:flex; align-items:baseline; gap:10px; flex-wrap:wrap}
+.fid{color:var(--accent); font-weight:600}
+.axis{font-size:11px; color:var(--dim); border:1px solid var(--line2); border-radius:4px; padding:1px 6px}
+.leth{margin-left:auto; font-size:11px; color:var(--dim); white-space:nowrap}
+.leth .pip{color:var(--fail)} .leth .pip.off{color:var(--line2)}
+.finding .title{font-weight:600; margin:8px 0 10px; line-height:1.45}
+.kv{display:grid; grid-template-columns:96px 1fr; gap:4px 12px; font-size:12.5px}
+.kv .k{color:var(--dim); text-transform:uppercase; font-size:10.5px; letter-spacing:.04em; padding-top:2px}
+.kv .v{color:var(--fg)}
+.kv .v.q{color:var(--warn)}
+.src{color:var(--accent)}
+
+/* verifier terminal block */
+.verifier{border:1px solid var(--line); border-radius:8px; background:var(--panel2);
+  padding:12px 14px; margin:10px 0; font-size:12.5px}
+.verifier .cmd{color:var(--dim)}
+.verifier .cmd .fid{color:var(--accent)}
+.gate{display:grid; grid-template-columns:18px 150px 52px 1fr; gap:8px; align-items:start;
+  padding:2px 0}
+.gate .g{color:var(--faint)}
+.gate .gname{color:var(--fg)}
+.gate .res{font-weight:700}
+.gate .reason{color:var(--dim)}
+.pass{color:var(--pass)} .fail{color:var(--fail)} .green{color:var(--green)}
+.verdict{margin-top:8px; padding-top:8px; border-top:1px dashed var(--line2); font-weight:700}
+.verifier.failblock{border-left:2px solid var(--fail)}
+.verifier.passblock{border-left:2px solid var(--pass)}
+
+/* status line */
+.status{font-weight:700; letter-spacing:.03em; padding:10px 14px; border-radius:6px; margin:14px 0;
+  border:1px solid var(--line2)}
+.status.fail{color:var(--fail); border-color:rgba(248,81,73,.4); background:rgba(248,81,73,.06)}
+.status.pass{color:var(--pass); border-color:rgba(63,185,80,.4); background:rgba(63,185,80,.06)}
+
+/* revise banner */
+.revise{border:1px dashed var(--warn); border-radius:8px; padding:12px 14px; margin:12px 0;
+  background:rgba(210,153,34,.05); font-size:12.5px}
+.revise .h{color:var(--warn); font-weight:700; margin-bottom:6px}
+.revise .diff{display:grid; grid-template-columns:54px 1fr; gap:4px 10px; margin-top:6px}
+.revise .lab{color:var(--dim)}
+.revise .before{color:var(--fail)} .revise .after{color:var(--pass)}
+
+/* kill-list rows */
+.killrow{display:flex; gap:10px; align-items:baseline; padding:9px 12px; border:1px solid var(--line);
+  border-radius:6px; margin:7px 0; background:var(--panel)}
+.killrow .rank{color:var(--faint); width:18px; flex:0 0 auto}
+.killrow .fid{flex:0 0 auto}
+.killrow .kt{flex:1; min-width:0}
+.killrow .badges{display:flex; gap:5px; flex:0 0 auto}
+.badge{font-size:10.5px; border:1px solid var(--line2); border-radius:4px; padding:0 5px; color:var(--dim)}
+.badge.ok{color:var(--pass); border-color:rgba(63,185,80,.35)}
+.badge.no{color:var(--fail); border-color:rgba(248,81,73,.35)}
+
+/* greenlight */
+.gl-decision{border:1px solid rgba(86,211,100,.4); border-left:3px solid var(--green);
+  border-radius:8px; background:rgba(86,211,100,.05); padding:16px 18px; margin:6px 0 12px}
+.gl-decision .verdict{border:0; margin:0 0 8px; padding:0; color:var(--green); font-size:15px}
+.gl-decision .summary{color:var(--fg); font-size:12.5px; font-weight:400; line-height:1.6}
+.lever{border:1px solid var(--line); border-left:2px solid var(--green); border-radius:8px;
+  background:var(--panel); padding:13px 15px; margin:9px 0}
+.lever .head{display:flex; gap:10px; align-items:baseline; flex-wrap:wrap}
+.lever .ltype{font-size:10.5px; text-transform:uppercase; letter-spacing:.05em; color:var(--green);
+  border:1px solid rgba(86,211,100,.35); border-radius:4px; padding:1px 6px}
+.lever .title{font-weight:600; margin:8px 0}
+.lever .gates{display:flex; gap:6px; margin-top:8px}
+.config{border:1px solid var(--line); border-radius:8px; background:var(--panel2); padding:14px 16px; margin:10px 0}
+.config .row{display:grid; grid-template-columns:160px 1fr; gap:6px 14px; padding:5px 0; border-bottom:1px solid var(--line)}
+.config .row:last-child{border-bottom:0}
+.config .k{color:var(--green); text-transform:uppercase; font-size:10.5px; letter-spacing:.04em}
+.config .bottom{margin-top:10px; padding-top:10px; border-top:1px dashed var(--line2); color:var(--fg); font-weight:600}
+
+/* memory */
+.mem{border:1px solid var(--line); border-radius:8px; background:var(--panel); padding:12px 15px; margin:8px 0}
+.mem .h{color:var(--dim); font-size:11px; text-transform:uppercase; letter-spacing:.04em; margin-bottom:8px}
+.mem .pat{padding:5px 0; border-bottom:1px solid var(--line); font-size:12.5px}
+.mem .pat:last-child{border-bottom:0}
+.mem .pid{color:var(--accent)}
+
+.cursor::after{content:"\2588"; color:var(--green); animation:blink 1s step-end infinite; margin-left:2px}
+@keyframes blink{50%{opacity:0}}
+
+/* fallback (real artifact) specific */
+.prov{color:var(--warn); font-size:11px; font-weight:600}
+.subhead{font-weight:700; color:var(--fg); margin:16px 0 6px; font-size:12.5px}
+.subhead .tag{color:var(--dim); font-weight:400; font-size:11px; margin-left:6px}
+.prov-log{font-size:11px; margin:2px 0 6px}
+
+.incomplete{border:1px dashed var(--warn); border-radius:8px; padding:13px 15px; margin:10px 0;
+  background:rgba(210,153,34,.05)}
+.incomplete .ih{color:var(--warn); font-weight:700; margin-bottom:8px; font-size:12.5px}
+.incomplete .iwarn{color:var(--warn)}
+.incomplete .ids{display:flex; flex-wrap:wrap; gap:6px 14px; margin:8px 0}
+.incomplete .prow{display:flex; gap:8px; align-items:baseline; font-size:12px}
+.incomplete .pid{color:var(--accent); font-weight:600}
+.incomplete .paxis{color:var(--dim); font-size:11px}
+.incomplete .pverdict{color:var(--faint); font-style:italic}
+.incomplete .evid{color:var(--dim); font-size:12px; margin:8px 0; line-height:1.55}
+.incomplete .istat{color:var(--warn); font-size:12px; border-top:1px dashed var(--line2); padding-top:8px; margin-top:6px}
+
+.dnr{border:1px solid rgba(248,81,73,.5); border-left:3px solid var(--fail); border-radius:8px;
+  background:rgba(248,81,73,.07); padding:18px 20px; margin:8px 0}
+.dnr .dnrhead{color:var(--fail); font-weight:800; font-size:19px; letter-spacing:.04em}
+.dnr .dnrbody{color:var(--fg); font-size:12.5px; line-height:1.6; margin-top:8px}
+.dnr .dnrnote{font-size:11px; margin-top:10px}
+
+.livenote{max-width:880px; margin:12px auto 0; padding:11px 16px; border:1px solid var(--line2);
+  border-left:2px solid var(--accent); border-radius:8px; background:var(--panel);
+  font-size:12px; color:var(--dim); line-height:1.6}
+.livenote b{color:var(--fg)}
+
+@media (max-width:640px){
+  .gate{grid-template-columns:16px 1fr; }
+  .gate .res{grid-column:2}
+  .gate .reason{grid-column:1 / -1; padding-left:24px}
+  .kv,.config .row,.protocol .grid{grid-template-columns:1fr}
+  .kv .k{padding-top:6px}
+}

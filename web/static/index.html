@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Trial Pre-Mortem — PSP</title>
+  <link rel="stylesheet" href="/static/styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="brand">
+      <span class="dot"></span> trial pre-mortem
+      <span class="sub" id="indication">/ PSP</span>
+    </div>
+    <div class="controls">
+      <span class="engine" id="engine"></span>
+      <button id="runlive" class="btn" title="live mode (optional) — replay is the default">run&nbsp;live&nbsp;&#9655;</button>
+      <button id="skip" class="btn" title="reveal everything now">skip&nbsp;&raquo;</button>
+      <button id="replay" class="btn" title="replay from the top">&#9654;&nbsp;replay</button>
+    </div>
+  </header>
+
+  <main id="stage">
+    <div id="boot" class="dim mono">connecting to run&hellip;</div>
+  </main>
+
+  <footer class="footer dim mono">
+    builder &rarr; verifier (fresh, independent context) &rarr; revise &rarr; greenlight ·
+    <a href="/run.json">/run.json</a> · <a href="/health">/health</a>
+  </footer>
+
+  <script src="/static/app.js"></script>
+</body>
+</html>

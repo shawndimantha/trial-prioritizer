@@ -1,0 +1,325 @@
+{
+  "schema_version": "1.0",
+  "note": "Fixture for the frontend replay. Inner `finding` and `verdict` objects match the engine's pydantic shapes EXACTLY (premortem/schemas.py: Finding, Verdict, Citation). The outer envelope (timeline, greenlight, memory_appended) is a forward-compatible wrapper the replay needs but the engine's Result does not yet carry: Result holds only FINAL verdicts, the greenlight pass is not yet implemented, and runs are not yet persisted to JSON. When the engine emits a real run (Task C), it maps into this envelope.",
+  "run_id": "fixture-gosuranemab-psp-001",
+  "mode": "replay",
+  "generated_at": "2026-06-13T17:40:00Z",
+  "engine": {
+    "builder": "claude-opus-4-8",
+    "verifier": "claude-opus-4-8",
+    "verifier_kind": "SinglePassVerifier"
+  },
+  "indication": "Progressive Supranuclear Palsy (PSP)",
+  "axes": ["1", "2", "3"],
+  "status": "STATUS: PASS",
+  "iterations": 2,
+  "protocol": {
+    "name": "Phase 2 anti-tau monoclonal antibody in PSP",
+    "indication": "Progressive Supranuclear Palsy (PSP)",
+    "population": "Probable PSP-Richardson syndrome per MDS-PSP 2017 criteria",
+    "eligibility": "Age 40-80; PSPRS within a defined window; able to walk 5 steps unaided; CSF or tau-PET confirmation of tauopathy",
+    "intervention": {
+      "modality": "humanized IgG4 monoclonal antibody",
+      "mechanism": "binds extracellular N-terminal tau to block trans-synaptic seeding and spread",
+      "route": "IV every 4 weeks"
+    },
+    "primary_endpoint": "Change from baseline in PSP Rating Scale (PSPRS) at 52 weeks",
+    "secondary_endpoints": ["CSF total tau", "plasma NfL", "tau-PET SUVR", "Schwab & England ADL"],
+    "powering": {
+      "assumed_effect": "30% slowing of PSPRS progression vs placebo",
+      "n": 200,
+      "randomization": "1:1 active:placebo",
+      "alpha": 0.05,
+      "power": 0.8
+    },
+    "design": "Randomized, double-blind, placebo-controlled, 52 weeks, multi-site"
+  },
+
+  "findings": [
+    {
+      "id": "A3-1",
+      "axis": "3",
+      "title": "Extracellular N-terminal tau engagement does not translate to clinical benefit in PSP — this exact mechanism already failed.",
+      "verdict": "The intervention binds extracellular N-terminal tau to block trans-synaptic spread — the same mechanism as gosuranemab. In PASSPORT, gosuranemab achieved near-complete target engagement yet produced no clinical benefit on PSPRS. Target engagement here is not evidence of efficacy; the one trial that engaged this target proved engagement and benefit are decoupled in PSP.",
+      "quantitative_threshold": "PASSPORT: ~98% reduction in free CSF N-terminal tau (target engaged) yet adjusted PSPRS difference vs placebo of ~0.2 points at week 52, p=0.85 (not significant). This protocol is powered for 30% PSPRS slowing on the identical mechanism.",
+      "citation": {
+        "source_id": "NCT03068468",
+        "title": "PASSPORT: A Study to Evaluate the Efficacy and Safety of Gosuranemab (BIIB092) in Participants With Progressive Supranuclear Palsy",
+        "url": "https://clinicaltrials.gov/study/NCT03068468"
+      },
+      "remediation": "Do not run as designed. A defensible program must target a differentiated tau species — seed-competent MTBR (microtubule-binding-region) tau, or total-tau lowering via ASO — rather than re-binding the extracellular N-terminal epitope PASSPORT already cleared without benefit. Absent a differentiated translational rationale, this is a do-not-run.",
+      "lethality": 5
+    },
+    {
+      "id": "A3-2",
+      "axis": "3",
+      "title": "The N-terminal anti-tau antibody class is a graveyard — a second independent failure corroborates the kill.",
+      "verdict": "Gosuranemab is not an isolated miss. Tilavonemab (AbbVie ABBV-8E12), an independent N-terminal-directed anti-tau monoclonal, was also tested in PSP and stopped for futility with no benefit on PSPRS. Two independent antibodies against the same extracellular N-terminal target both failed — this is a class signal, not a molecule-specific one.",
+      "quantitative_threshold": "Tilavonemab Phase 2 in PSP (N≈378) terminated at the pre-specified interim for futility; no significant PSPRS benefit vs placebo. Combined with PASSPORT, that is 2/2 N-terminal antibodies failing in PSP.",
+      "citation": {
+        "source_id": "NCT02985879",
+        "title": "A Study of ABBV-8E12 (Tilavonemab) in Participants With Progressive Supranuclear Palsy (PSP)",
+        "url": "https://clinicaltrials.gov/study/NCT02985879"
+      },
+      "remediation": "A same-epitope antibody cannot claim differentiation from the failed class. Require a distinct molecular target (intracellular/seed-competent tau, total-tau lowering) before committing IND resources.",
+      "lethality": 4
+    },
+    {
+      "id": "A2-1",
+      "axis": "2",
+      "title": "Powered for a 30% effect no anti-tau agent has ever shown against a noisy scale at N=200.",
+      "verdict": "The 30% PSPRS-slowing assumption is not anchored to any positive precedent — every anti-tau agent tested in PSP has shown ~0% slowing. PSPRS progresses ~10-11 points/year with high inter-patient variance; at N=200 the trial is underpowered to detect the more realistic <=20% effect, and is sized to an effect that has never been observed.",
+      "quantitative_threshold": "Assumed 30% slowing, N=200, 1:1, alpha 0.05, 80% power. Natural-history PSPRS progression ~10-11 pts/yr (SD large). A realistic 20% effect roughly doubles the required N; the current design has no interim futility gate.",
+      "citation": {
+        "source_id": "NCT01110720",
+        "title": "Davunetide (AL-108-231) in Predicted Tauopathies — PSP cohort; placebo-arm PSPRS progression and variance",
+        "url": "https://clinicaltrials.gov/study/NCT01110720"
+      },
+      "remediation": "Add a pre-specified interim futility gate; re-power for a realistic <=20% slowing (larger N) or adopt a Bayesian adaptive design; do not power to an effect size with zero positive precedent in the indication.",
+      "lethality": 4
+    },
+    {
+      "id": "A1-1",
+      "axis": "1",
+      "title": "Mandatory tau-PET/CSF confirmation plus ambulation cut an already-tiny pool below feasible enrollment.",
+      "verdict": "PSP prevalence is ~5-7/100,000. Requiring tau-PET OR CSF confirmation of tauopathy AND the ability to walk 5 steps unaided stacks two restrictive gates onto a rare population, inflating screen-fail and slowing accrual. Comparable PSP trials enrolled slowly even with broader criteria.",
+      "quantitative_threshold": "Prevalence ~5-7/100,000. PASSPORT enrolled N=486 across ~60 sites in multiple countries over ~2 years with clinical (not mandatory-PET) criteria; layering mandatory confirmatory imaging/CSF onto that materially raises screen-fail rate and timeline.",
+      "citation": {
+        "source_id": "NCT03068468",
+        "title": "PASSPORT enrollment record (N, sites, duration) and PSP epidemiology — ClinicalTrials.gov",
+        "url": "https://clinicaltrials.gov/study/NCT03068468"
+      },
+      "remediation": "Enroll on MDS-PSP 2017 'probable PSP-Richardson syndrome' clinical criteria; make tau-PET/CSF confirmatory (not gating) or a sub-study; broaden the ambulation requirement and expand to >50 sites to hit timeline.",
+      "lethality": 4
+    },
+    {
+      "id": "A2-2",
+      "axis": "2",
+      "title": "CSF tau / NfL / tau-PET are engagement markers, not approvable surrogates — the secondary stack cannot carry the efficacy argument.",
+      "verdict": "The secondary endpoints (CSF total tau, plasma NfL, tau-PET SUVR) are positioned as if they support an efficacy claim. None is an FDA-validated surrogate for clinical benefit in PSP; there is no approved DMT and no qualified surrogate. A biomarker move without PSPRS benefit is not an approvable result.",
+      "quantitative_threshold": "Zero biomarkers qualified as surrogate endpoints for PSP efficacy (FDA). PASSPORT moved engagement biomarkers (~98% free-tau reduction) with 0 clinical benefit — direct proof biomarker movement != benefit here.",
+      "citation": {
+        "source_id": "FDA-PSP-DMT-STATUS",
+        "title": "FDA: no approved disease-modifying therapy and no qualified surrogate endpoint for PSP (neurodegeneration endpoint guidance)",
+        "url": "https://www.fda.gov/drugs/development-resources"
+      },
+      "remediation": "Demote biomarkers to go/no-go target-engagement readouts feeding an interim decision; keep PSPRS as the sole primary efficacy endpoint; do not file an efficacy narrative resting on biomarker movement.",
+      "lethality": 3
+    },
+    {
+      "id": "A3-3",
+      "axis": "3",
+      "title": "Davunetide is a third independent anti-tau failure in PSP — corroborating, but the first draft overstated it (negative control).",
+      "verdict": "Davunetide (a tau-directed neuroprotective agent) was tested in PSP and showed no benefit on PSPRS or function — a third independent anti-tau approach that engaged plausibly yet failed. It corroborates the class risk that motivates the kill.",
+      "quantitative_threshold": "Davunetide PSP trial (N=313, 52 weeks): no significant difference vs placebo on PSPRS or SEADL (co-primaries). Adds a third independent null to the anti-tau PSP record.",
+      "citation": {
+        "source_id": "NCT01110720",
+        "title": "Davunetide (AL-108-231) Phase 2/3 in PSP — Boxer et al., Lancet Neurology 2014",
+        "url": "https://clinicaltrials.gov/study/NCT01110720"
+      },
+      "remediation": "Treat the anti-tau PSP record as 3/3 independent failures (gosuranemab, tilavonemab, davunetide) when judging whether an N-terminal antibody is differentiated; require a distinct mechanism.",
+      "lethality": 3
+    }
+  ],
+
+  "kill_list": ["A3-1", "A3-2", "A2-1", "A1-1", "A2-2", "A3-3"],
+
+  "timeline": [
+    {
+      "iteration": 1,
+      "label": "Builder drafts 6 findings -> verifier grades each in a fresh, independent context (rubric.md + one finding, no builder reasoning).",
+      "verdicts": [
+        {
+          "finding_id": "A3-1", "passed": true,
+          "g1": {"passed": true, "reason": "NCT03068468 (PASSPORT, gosuranemab in PSP) retrieved; real, specific, public."},
+          "g2": {"passed": true, "reason": "Verdict matches source: near-complete target engagement, no PSPRS benefit at wk52."},
+          "g3": {"passed": true, "reason": "Carries thresholds: ~98% free-tau reduction, ~0.2-pt PSPRS diff, p=0.85, vs 30% powering."},
+          "g4": {"passed": true, "reason": "Specific fix (differentiate to MTBR/total-tau) or reasoned do-not-run with conditions."}
+        },
+        {
+          "finding_id": "A3-2", "passed": true,
+          "g1": {"passed": true, "reason": "NCT02985879 (tilavonemab/ABBV-8E12 in PSP) retrieved; real and specific."},
+          "g2": {"passed": true, "reason": "Source confirms futility termination, no PSPRS benefit; 2/2 N-terminal antibodies failed."},
+          "g3": {"passed": true, "reason": "Quantified: N~378, interim futility stop; combined 2/2 class failures."},
+          "g4": {"passed": true, "reason": "Actionable: require distinct molecular target before IND commitment."}
+        },
+        {
+          "finding_id": "A2-1", "passed": true,
+          "g1": {"passed": true, "reason": "NCT01110720 placebo-arm PSPRS progression/variance retrieved as the powering anchor."},
+          "g2": {"passed": true, "reason": "Verdict follows: 30% effect has no positive precedent; N=200 underpowered for <=20%."},
+          "g3": {"passed": true, "reason": "Thresholds present: ~10-11 pts/yr progression, 30% vs realistic <=20%, N implications."},
+          "g4": {"passed": true, "reason": "Concrete: add futility interim, re-power or Bayesian adaptive."}
+        },
+        {
+          "finding_id": "A1-1", "passed": true,
+          "g1": {"passed": true, "reason": "PASSPORT enrollment record + PSP prevalence retrievable; sources specific."},
+          "g2": {"passed": true, "reason": "Verdict matches: stacked confirmatory gates raise screen-fail on a rare population."},
+          "g3": {"passed": true, "reason": "Quantified: prevalence 5-7/100k, N=486/~60 sites/~2yr comparator."},
+          "g4": {"passed": true, "reason": "Specific: switch to MDS-PSP clinical criteria, confirmatory-not-gating PET, expand sites."}
+        },
+        {
+          "finding_id": "A2-2", "passed": true,
+          "g1": {"passed": true, "reason": "FDA neurodegeneration endpoint posture (no qualified PSP surrogate) retrievable."},
+          "g2": {"passed": true, "reason": "Verdict matches: biomarkers are engagement, not approvable surrogates in PSP."},
+          "g3": {"passed": true, "reason": "Quantified: 0 qualified surrogates; PASSPORT ~98% engagement, 0 benefit."},
+          "g4": {"passed": true, "reason": "Actionable: demote biomarkers to go/no-go, keep PSPRS sole primary."}
+        },
+        {
+          "finding_id": "A3-3", "passed": false,
+          "g1": {"passed": true, "reason": "NCT01110720 (davunetide in PSP, Boxer 2014) retrieved; real and specific."},
+          "g2": {"passed": false, "reason": "OVERSTATES SOURCE: draft claimed davunetide 'worsened PSPRS (harm signal).' The trial showed NO significant difference vs placebo — null, not harm. Verdict does not follow from the source."},
+          "g3": {"passed": true, "reason": "Numeric content present (N=313, 52 wk)."},
+          "g4": {"passed": false, "reason": "Remediation built on the false 'harm' premise ('anti-aggregation is dangerous') is not supported and not actionable."}
+        }
+      ],
+      "status": "STATUS: FAIL [A3-3]",
+      "failed": ["A3-3"]
+    },
+    {
+      "iteration": 2,
+      "label": "Builder revises ONLY A3-3 (corrects the overstated claim to what the source actually says) -> verifier re-grades all findings.",
+      "revised": ["A3-3"],
+      "verdicts": [
+        {
+          "finding_id": "A3-1", "passed": true,
+          "g1": {"passed": true, "reason": "NCT03068468 retrieved; unchanged PASS."},
+          "g2": {"passed": true, "reason": "Verdict matches source; unchanged PASS."},
+          "g3": {"passed": true, "reason": "Quantitative thresholds intact; unchanged PASS."},
+          "g4": {"passed": true, "reason": "Differentiated-mechanism fix / do-not-run; unchanged PASS."}
+        },
+        {
+          "finding_id": "A3-2", "passed": true,
+          "g1": {"passed": true, "reason": "NCT02985879 retrieved; unchanged PASS."},
+          "g2": {"passed": true, "reason": "Source confirms futility; unchanged PASS."},
+          "g3": {"passed": true, "reason": "2/2 class failures quantified; unchanged PASS."},
+          "g4": {"passed": true, "reason": "Distinct-target requirement; unchanged PASS."}
+        },
+        {
+          "finding_id": "A2-1", "passed": true,
+          "g1": {"passed": true, "reason": "NCT01110720 powering anchor retrieved; unchanged PASS."},
+          "g2": {"passed": true, "reason": "No positive precedent for 30%; unchanged PASS."},
+          "g3": {"passed": true, "reason": "Progression/effect thresholds intact; unchanged PASS."},
+          "g4": {"passed": true, "reason": "Futility interim + re-power; unchanged PASS."}
+        },
+        {
+          "finding_id": "A1-1", "passed": true,
+          "g1": {"passed": true, "reason": "Enrollment + prevalence sources retrieved; unchanged PASS."},
+          "g2": {"passed": true, "reason": "Stacked gates raise screen-fail; unchanged PASS."},
+          "g3": {"passed": true, "reason": "Prevalence/N/sites quantified; unchanged PASS."},
+          "g4": {"passed": true, "reason": "MDS-PSP criteria + site expansion; unchanged PASS."}
+        },
+        {
+          "finding_id": "A2-2", "passed": true,
+          "g1": {"passed": true, "reason": "FDA surrogate posture retrieved; unchanged PASS."},
+          "g2": {"passed": true, "reason": "Engagement != surrogate; unchanged PASS."},
+          "g3": {"passed": true, "reason": "0 qualified surrogates quantified; unchanged PASS."},
+          "g4": {"passed": true, "reason": "Demote biomarkers to go/no-go; unchanged PASS."}
+        },
+        {
+          "finding_id": "A3-3", "passed": true,
+          "g1": {"passed": true, "reason": "NCT01110720 retrieved; real and specific."},
+          "g2": {"passed": true, "reason": "FIXED: revised verdict now states davunetide showed NO benefit (null) — matches Boxer 2014 exactly. Overstatement removed."},
+          "g3": {"passed": true, "reason": "Quantified: N=313, 52 wk, co-primaries null; adds a third independent null."},
+          "g4": {"passed": true, "reason": "Actionable: treat anti-tau PSP record as 3/3 failures when judging differentiation."}
+        }
+      ],
+      "status": "STATUS: PASS",
+      "failed": []
+    }
+  ],
+
+  "memory_appended": [
+    {
+      "finding_id": "A3-1",
+      "pattern": "Extracellular N-terminal tau engagement -> no PSP clinical benefit (PASSPORT). Generalizes to: target-engagement-without-downstream-effect — engagement is necessary, not sufficient.",
+      "axis": "3", "lethality": 5, "citation_id": "NCT03068468"
+    },
+    {
+      "finding_id": "A3-2",
+      "pattern": "Same-epitope 'me-too' biologic inherits the class failure (tilavonemab corroborates gosuranemab). Generalizes to: a molecule sharing a failed target's mechanism cannot claim differentiation.",
+      "axis": "3", "lethality": 4, "citation_id": "NCT02985879"
+    },
+    {
+      "finding_id": "A2-1",
+      "pattern": "Powering to an effect size with zero positive precedent in-indication. Generalizes to: anchor power calculations to observed effects, not aspirational ones; gate with interim futility.",
+      "axis": "2", "lethality": 4, "citation_id": "NCT01110720"
+    }
+  ],
+
+  "greenlight": {
+    "implemented": true,
+    "decision": "DO NOT RUN AS DESIGNED — but a defensible configuration exists.",
+    "summary": "The protocol as written (extracellular N-terminal anti-tau antibody, powered for 30% PSPRS slowing at N=200) is a do-not-run: it re-runs a mechanism proven inert in PSP across 3 independent trials, on optimistic powering, on an over-narrow population. A greenlight path exists only if it clears the SAME four gates as the kill — every lever below was verifier-passed. The path to yes requires (1) a differentiated tau species, (2) phenotype enrichment, (3) realistic, futility-gated powering.",
+    "levers": [
+      {
+        "id": "GL-1",
+        "type": "repurposing",
+        "axis": "3",
+        "title": "Repurpose salsalate — differentiated mechanism, collapsed IND burden.",
+        "verdict": "Salsalate is an approved anti-inflammatory (salicylate prodrug) that inhibits p300 acetyltransferase, reducing pathogenic tau acetylation — a mechanism distinct from the dead N-terminal-antibody class. As an approved drug it brings known safety/PK/tox, collapsing IND burden. Prior human/preclinical tau-acetylation signal exists, though PSP-specific efficacy is unproven.",
+        "quantitative_threshold": "Approved drug (existing safety DB); mechanistic link to 4R-tau via p300/tau-acetylation; small open-label PSP/FTD exposure exists. Lever is a futility-gated signal-finding bet, not a proven therapy.",
+        "citation": {
+          "source_id": "NCT01896385",
+          "title": "Salsalate in Progressive Supranuclear Palsy — open-label pilot (tau acetylation rationale)",
+          "url": "https://clinicaltrials.gov/study/NCT01896385"
+        },
+        "remediation": "Run salsalate behind a biomarker-gated go/no-go interim; advance only on a pre-specified target-engagement signal.",
+        "lethality": 0,
+        "gate_result": {
+          "g1": {"passed": true, "reason": "Approval status and PSP pilot retrievable."},
+          "g2": {"passed": true, "reason": "Claims bounded to 'candidate/unproven' — no overstatement of efficacy."},
+          "g3": {"passed": true, "reason": "Three grounded facts: approval, mechanism, prior signal."},
+          "g4": {"passed": true, "reason": "Concrete design: biomarker-gated futility interim."}
+        }
+      },
+      {
+        "id": "GL-2",
+        "type": "repurposing",
+        "axis": "3",
+        "title": "Lithium as a GSK-3β-rationale CANDIDATE — held to the same bar, not adopted as proven.",
+        "verdict": "Lithium is approved and inhibits GSK-3β, reducing tau phosphorylation — a plausible 4R-tau mechanistic link. It is a repurposing CANDIDATE only: there is no positive PSP efficacy trial, so the optimism must be hedged exactly as a risk would be. This lever passes only because it is framed as a futility-gated bet, not a claim of benefit.",
+        "quantitative_threshold": "Approved drug; GSK-3β -> tau-phosphorylation mechanistic link; prior tauopathy human exposure with NO demonstrated PSP benefit to date. Admitted as candidate-for-testing, not proven therapy.",
+        "citation": {
+          "source_id": "NCT00703677",
+          "title": "Lithium in Progressive Supranuclear Palsy and Corticobasal Degeneration — tolerability/feasibility",
+          "url": "https://clinicaltrials.gov/study/NCT00703677"
+        },
+        "remediation": "Only as a dedicated futility-gated Phase 2 signal-finding arm with a pre-specified stopping rule; do not position as established therapy.",
+        "lethality": 0,
+        "gate_result": {
+          "g1": {"passed": true, "reason": "Approval + PSP/CBD lithium study retrievable."},
+          "g2": {"passed": true, "reason": "Honestly framed as candidate with NO proven benefit — earlier 'proven to slow PSP' draft was FAILED and corrected (optimism clears the same bar)."},
+          "g3": {"passed": true, "reason": "Approval, GSK-3β mechanism, prior-exposure facts all grounded."},
+          "g4": {"passed": true, "reason": "Specific: futility-gated arm with stopping rule."}
+        }
+      },
+      {
+        "id": "GL-3",
+        "type": "ind-design",
+        "axis": "2",
+        "title": "Redesigned IND: differentiated target + phenotype enrichment + Bayesian adaptive + futility gate.",
+        "verdict": "Independent of the molecule, the trial design itself can be made defensible: switch the primary target to seed-competent MTBR / total-tau lowering (escaping the N-terminal graveyard), enrich for probable PSP-Richardson syndrome, adopt a Bayesian adaptive design powered for a realistic <=20% slowing, and install a pre-specified biomarker-gated interim futility gate so the trial can stop early for the right reasons.",
+        "quantitative_threshold": "Re-power for <=20% PSPRS slowing (vs the unprecedented 30%); add interim futility at ~50% information; biomarkers (CSF tau, NfL, tau-PET) as go/no-go engagement readouts, PSPRS as sole primary.",
+        "citation": {
+          "source_id": "NCT03068468",
+          "title": "PASSPORT (engagement-without-benefit) as the design constraint motivating futility-gated, differentiated-target trials",
+          "url": "https://clinicaltrials.gov/study/NCT03068468"
+        },
+        "remediation": "Adopt as the greenlight design: differentiated tau species, RS enrichment, Bayesian adaptive, interim futility, biomarkers as go/no-go only.",
+        "lethality": 0,
+        "gate_result": {
+          "g1": {"passed": true, "reason": "Grounded in the PASSPORT engagement-vs-benefit record."},
+          "g2": {"passed": true, "reason": "Design claims follow from the cited failure mode."},
+          "g3": {"passed": true, "reason": "Quantified: <=20% effect, interim at ~50% info, named endpoints."},
+          "g4": {"passed": true, "reason": "Itself a concrete, parameter-level design specification."}
+        }
+      }
+    ],
+    "config": {
+      "mechanism": "SWITCH: extracellular N-terminal antibody -> seed-competent MTBR / total-tau-lowering ASO, OR repurpose salsalate / lithium (differentiated, IND burden collapsed).",
+      "population": "Enrich for probable PSP-Richardson syndrome (MDS-PSP 2017); tau-PET/CSF confirmatory not gating; broaden ambulation; expand to >50 sites.",
+      "endpoint_and_powering": "PSPRS sole primary; re-power for realistic <=20% slowing via Bayesian adaptive design; pre-specified biomarker-gated interim futility gate; biomarkers (CSF tau, NfL, tau-PET) as go/no-go engagement only.",
+      "bottom_line": "Do NOT run the antibody protocol as designed. A trial becomes defensible only when it (1) targets a differentiated tau species, (2) enriches phenotype, and (3) powers realistically behind a futility gate — every one of those levers cleared the same verifier the kill-list did."
+    }
+  }
+}
