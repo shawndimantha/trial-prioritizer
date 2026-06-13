@@ -1,0 +1,42 @@
+[
+  {
+    "id": "A3-1",
+    "axis": "3",
+    "title": "N-terminal extracellular tau is a proven clinical dead end in PSP (PASSPORT)",
+    "verdict": "Gosuranemab (BIIB092), a humanized IgG4 anti-N-terminal-tau IV mAb mechanistically identical to this protocol, hit its molecular target almost completely in PASSPORT yet produced zero clinical separation. Target engagement does not translate to clinical benefit for this mechanism.",
+    "quantitative_threshold": "~98% reduction in unbound CSF N-terminal tau yet a between-arm PSPRS difference of ~0.2 points (p=0.85). Protocol assumes 30% slowing (~3.2-point difference); precedent delivered ~2%.",
+    "citation": {"source_id": "NCT03068468", "title": "PASSPORT: Gosuranemab Phase 2 in PSP (Dam et al., Nature Medicine 2021)", "url": "https://www.nature.com/articles/s41591-021-01455-x"},
+    "remediation": "Do not run an N-terminal extracellular-tau antibody on the prior hypothesis. To proceed, specify a differentiated tau species (e.g. seed-competent MTBR tau) and pre-register a target-engagement assay tied to that species.",
+    "lethality": 5
+  },
+  {
+    "id": "A3-2",
+    "axis": "3",
+    "title": "Class failure replicates: tilavonemab (same epitope) stopped for futility",
+    "verdict": "Tilavonemab (ABBV-8E12), a humanized IgG4 antibody targeting a similar N-terminal epitope, independently terminated for futility. The mechanism has a 0/2 record among adequately sized trials of its class.",
+    "quantitative_threshold": "n=377 dosed; week-52 PSPRS between-group difference vs placebo ~0.0 (95% CI spanning 0), effect size ~0. Combined with PASSPORT, >850 dosed patients contradict the protocol's assumed effect.",
+    "citation": {"source_id": "NCT02985879", "title": "Tilavonemab Phase 2 in PSP (Hoglinger et al., Lancet Neurology 2021)", "url": "https://www.sciencedirect.com/science/article/pii/S1474442220304890"},
+    "remediation": "A differentiated rationale is mandatory before any new N-terminal antibody; if the sponsor cannot rebut the published class failure, do not run.",
+    "lethality": 5
+  },
+  {
+    "id": "A2-1",
+    "axis": "2",
+    "title": "n=180 underpowered and assumed effect falls below the PSPRS MCID",
+    "verdict": "The protocol assumes 30% slowing and powers n=180. Two far larger trials (PASSPORT, tilavonemab) detected no signal, and the assumed effect is below the clinically meaningful threshold for the scale.",
+    "quantitative_threshold": "Placebo PSPRS progression ~10.6 pts/yr; 30% slowing = ~3.2-pt between-arm difference, below the PSPRS MCID (~5.7 pts). Detecting 3.2 pts at 80%/alpha 0.05 needs ~300 total; 180 is under-resourced even on its own optimistic assumption.",
+    "citation": {"source_id": "PubMed 27324431", "title": "PSPRS minimal clinically important difference analysis", "url": "https://pubmed.ncbi.nlm.nih.gov/27324431/"},
+    "remediation": "Re-anchor the assumed effect to credible precedent and re-power to detect at least the MCID, or concede the trial is not viable at n=180.",
+    "lethality": 4
+  },
+  {
+    "id": "A2-2",
+    "axis": "2",
+    "title": "Endpoint is the legacy 28-item PSPRS the field is retiring",
+    "verdict": "The protocol uses the legacy 28-item PSPRS total at 52 weeks — the exact instrument/timepoint that failed in the negative trials — rather than the FDA-engaged refined scales the current differentiated programs use.",
+    "quantitative_threshold": "28-item total includes items insensitive to change over typical trial durations; modern programs use condensed scales (e.g. mPSPRS-10/15) at longer windows (~72 weeks).",
+    "citation": {"source_id": "NCT01110720", "title": "Davunetide (Boxer et al., Lancet Neurology 2014) and subsequent PSPRS refinement", "url": "https://pubmed.ncbi.nlm.nih.gov/25304045/"},
+    "remediation": "Adopt a pre-specified, FDA-aligned sensitive endpoint (mPSPRS-15 or CAFS) and consider a longer window; confirm at a pre-IND meeting.",
+    "lethality": 3
+  }
+]

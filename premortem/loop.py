@@ -27,6 +27,7 @@ class Result:
     kill_list: list[Finding]
     verdicts: list[Verdict]
     iterations: int
+    greenlight: object = None  # GreenlightResult | None (attached by run_job)
 
 
 def run_premortem(job, builder: Builder, verifier: Verifier, max_iters: int = 5) -> Result:

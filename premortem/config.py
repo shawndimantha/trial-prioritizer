@@ -33,7 +33,10 @@ def client() -> anthropic.Anthropic:
     """Lazy singleton. Resolves ANTHROPIC_API_KEY from the environment."""
     global _client
     if _client is None:
-        _client = anthropic.Anthropic()
+        # Generous per-request timeout; heavy tool-loop turns (adaptive thinking +
+        # web_search + code_execution) can run many minutes. Streaming (below) is
+        # the primary guard against read timeouts; this covers non-streaming parse.
+        _client = anthropic.Anthropic(timeout=1800.0)
     return _client
 
 
@@ -69,7 +72,9 @@ def run_tool_loop(role, system, user, tools, dispatch_fn, max_turns=12, on_event
     msgs = [{"role": "user", "content": user}]
     resp = None
     for _ in range(max_turns):
-        resp = client().messages.create(
+        # Stream to keep the connection alive on long turns (prevents read
+        # timeouts). get_final_message() returns the complete accumulated Message.
+        with client().messages.stream(
             model=ROLE_MODELS[role],
             max_tokens=MAX_TOKENS,
             system=system,
@@ -77,7 +82,8 @@ def run_tool_loop(role, system, user, tools, dispatch_fn, max_turns=12, on_event
             tools=tools,
             thinking={"type": "adaptive"},
             output_config={"effort": "high"},
-        )
+        ) as stream:
+            resp = stream.get_final_message()
         msgs.append({"role": "assistant", "content": resp.content})
         _log_tool_calls(role, resp.content)
         if on_event:
