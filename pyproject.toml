@@ -1,0 +1,18 @@
+[project]
+name = "trial-premortem"
+version = "0.1.0"
+description = "A clinical-trial pre-mortem harness: builder drafts grounded findings, an independent verifier kills any it cannot substantiate from a retrievable source."
+requires-python = ">=3.10"
+dependencies = [
+    "anthropic>=0.69.0",
+    "pydantic>=2.0",
+    "httpx>=0.27",
+    "python-dotenv>=1.0",
+]
+
+[build-system]
+requires = ["setuptools>=68"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["premortem"]

@@ -1,0 +1,21 @@
+{
+  "name": "Phase 2 anti-tau monoclonal antibody in PSP",
+  "indication": "Progressive Supranuclear Palsy (PSP)",
+  "population": "Probable PSP-Richardson syndrome per MDS-PSP 2017 criteria",
+  "eligibility": "Age 40-80; PSPRS within a defined window; able to walk 5 steps unaided; CSF or tau-PET confirmation of tauopathy",
+  "intervention": {
+    "modality": "humanized IgG4 monoclonal antibody",
+    "mechanism": "binds extracellular N-terminal tau to block trans-synaptic seeding and spread",
+    "route": "IV every 4 weeks"
+  },
+  "primary_endpoint": "Change from baseline in PSP Rating Scale (PSPRS) at 52 weeks",
+  "secondary_endpoints": ["CSF total tau", "plasma NfL", "tau-PET SUVR", "Schwab & England ADL"],
+  "powering": {
+    "assumed_effect": "30% slowing of PSPRS progression vs placebo",
+    "n": 200,
+    "randomization": "1:1 active:placebo",
+    "alpha": 0.05,
+    "power": 0.8
+  },
+  "design": "Randomized, double-blind, placebo-controlled, 52 weeks, multi-site"
+}
