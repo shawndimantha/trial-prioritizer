@@ -4,52 +4,30 @@
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Trial Pre-Mortem — PSP</title>
-  <style>
-    :root { --bg:#0c0e12; --fg:#d6dae0; --dim:#7b8493; --line:#1d222b;
-            --pass:#3fb950; --fail:#f85149; --accent:#58a6ff; }
-    * { box-sizing: border-box; }
-    body { margin:0; background:var(--bg); color:var(--fg);
-           font: 14px/1.6 ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
-    main { max-width: 760px; margin: 0 auto; padding: 56px 20px; }
-    h1 { font-size: 20px; letter-spacing:.02em; margin:0 0 4px; }
-    .dim { color: var(--dim); }
-    .card { border:1px solid var(--line); border-radius:8px; padding:18px 20px; margin-top:24px; }
-    .row { display:flex; justify-content:space-between; gap:12px; padding:6px 0; border-bottom:1px solid var(--line); }
-    .row:last-child { border-bottom:0; }
-    .pass { color:var(--pass); } .fail { color:var(--fail); }
-    code { color:var(--accent); }
-    a { color: var(--accent); }
-    .muted { font-size:12px; }
-  </style>
+  <link rel="stylesheet" href="/static/styles.css" />
 </head>
 <body>
-  <main>
-    <h1>Trial Pre-Mortem <span class="dim">/ PSP</span></h1>
-    <div class="dim">builder &rarr; verifier &rarr; revise &rarr; greenlight. Deploy-path check.</div>
-
-    <div class="card">
-      <div class="dim muted" style="margin-bottom:10px">HOST READINESS &mdash; can this environment do a real run?</div>
-      <div id="health"><span class="dim">checking&hellip;</span></div>
+  <header class="topbar">
+    <div class="brand">
+      <span class="dot"></span> trial pre-mortem
+      <span class="sub" id="indication">/ PSP</span>
     </div>
-
-    <div class="card muted dim">
-      The replay page (the kill &rarr; revise &rarr; greenlight arc) renders in Task B.
-      Run data: <a href="/run.json">/run.json</a> &middot; raw health: <a href="/health">/health</a>
+    <div class="controls">
+      <span class="engine" id="engine"></span>
+      <button id="skip" class="btn" title="reveal everything now">skip&nbsp;&raquo;</button>
+      <button id="replay" class="btn" title="replay from the top">&#9654;&nbsp;replay</button>
     </div>
+  </header>
+
+  <main id="stage">
+    <div id="boot" class="dim mono">connecting to run&hellip;</div>
   </main>
 
-  <script>
-    fetch('/health').then(r => r.json()).then(h => {
-      const yn = (b) => b ? '<span class="pass">YES</span>' : '<span class="fail">NO</span>';
-      const ct = h.ctgov || {};
-      document.getElementById('health').innerHTML = `
-        <div class="row"><span>ANTHROPIC_API_KEY present</span><span>${yn(h.anthropic_key_present)} <span class="dim">(${h.anthropic_key_len} chars)</span></span></div>
-        <div class="row"><span>ClinicalTrials.gov reachable</span><span>${yn(ct.reachable)} <span class="dim">HTTP ${ct.status ?? '—'} · ${ct.ms ?? '—'}ms${ct.sample ? ' · '+ct.sample : ''}${ct.error ? ' · '+ct.error : ''}</span></span></div>
-        <div class="row"><span>Replaying</span><span><code>${h.active_run}</code> <span class="dim">${h.active_run_is_fixture ? '(fixture)' : '(real run)'}</span></span></div>
-        <div class="row"><span>Overall</span><span>${yn(h.ok)}</span></div>`;
-    }).catch(e => {
-      document.getElementById('health').innerHTML = '<span class="fail">health check failed: '+e+'</span>';
-    });
-  </script>
+  <footer class="footer dim mono">
+    builder &rarr; verifier (fresh, independent context) &rarr; revise &rarr; greenlight ·
+    <a href="/run.json">/run.json</a> · <a href="/health">/health</a>
+  </footer>
+
+  <script src="/static/app.js"></script>
 </body>
 </html>
